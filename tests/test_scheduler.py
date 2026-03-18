@@ -1,14 +1,17 @@
-from app.scheduler.time_utils import generate_free_slots
+from app.agent.decision import decide_workout
+from app.models.state import UserState, UserHistory
 
-def test_basic_case():
-    calendar = [
-        {"start": "09:00", "end": "11:00"},
-        {"start": "13:00", "end": "15:00"}
-    ]
+def test_decision():
+    state = UserState(
+        goal="fat_loss",
+        energy="medium",
+        free_slots=[("11:15","12:45"), ("15:15","20:45")],
+        preference="evening",
+        history=UserHistory(last_workout={"intensity":"medium"}, streak=2)
+    )
 
-    slots = generate_free_slots(calendar)
-
-    print(slots)
+    decision = decide_workout(state)
+    print(decision)
 
 if __name__ == "__main__":
-    test_basic_case()
+    test_decision()
